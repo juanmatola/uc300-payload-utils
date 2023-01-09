@@ -40,8 +40,8 @@ public class Main {
 		if(data.getAnalogInputs().get(11) != null) System.out.println("AI 01: " + data.getAnalogInputs().get(11));
 		if(data.getAnalogInputs().get(12) != null) System.out.println("AI 02: " + data.getAnalogInputs().get(12));
 		
-		if(data.getAnalogInputs().get(13) != null) System.out.println("AI 01 V ch-13: " + data.getAnalogInputs().get(13));
-		if(data.getAnalogInputs().get(14) != null) System.out.println("AI 02 V ch-14: " + data.getAnalogInputs().get(14));
+		if(data.getAnalogInputs().get(13) != null) System.out.println("AI 01 V: " + data.getAnalogInputs().get(13));
+		if(data.getAnalogInputs().get(14) != null) System.out.println("AI 02 V: " + data.getAnalogInputs().get(14));
 
 	}
 
