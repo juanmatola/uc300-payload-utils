@@ -1,22 +1,28 @@
 package main.encoder;
 
-import java.util.Base64;
 import java.util.Optional;
 
-@SuppressWarnings("unused")
 public abstract class UC300Encoder {
 
+	// Control
 	private static final byte DO1_CH = 0x07;
 	private static final byte DO2_CH = 0x08;
+
+	// Config
 	private static final byte DEVICE_CONFIG_CH = (byte) 0xFF;
 	private static final byte REPORTING_INVERVAL_ID = 0x03;
 	private static final byte REBOOT_ID = 0x10;
 
+	// Values
 	private static final byte HIGH = 0x01;
 	private static final byte LOW = 0x00;
 	private static final byte BLANK = 0x00;
 	private static final byte RESERVED_VALUE = (byte) 0xFF;
 
+	// Static cmd
+	private static final byte[] REBOOT_PAYLOAD = new byte[] { DEVICE_CONFIG_CH, REBOOT_ID, RESERVED_VALUE };
+
+	// DO control payload
 	public static byte[] encodeControlPayload(UC300DigitalOutputs outputs) {
 
 		byte[] payloadDO1 = getByteControlPayloadFrom(outputs.getDo01Value(), DO1_CH);
@@ -25,11 +31,39 @@ public abstract class UC300Encoder {
 		return concatPayloads(payloadDO1, payloadDO2);
 
 	}
-	
-	// TODO: Config payload
-	public static byte[] encodeConfigPayload(Object cfg) {
 
-		return null;
+	// Device config payloads
+
+	// Set reporting interval
+	// Default: 1800s
+	// Range: 10-64800s
+	public static byte[] encodeReportingIntervalPayload(Integer seconds) {
+
+		if (seconds > 64800)
+			seconds = 64800;
+
+		if (seconds < 10)
+			seconds = 10;
+
+		int value = seconds.intValue();
+
+		byte byte0 = (byte) value;
+		byte byte1 = (byte) (value >>> 8);
+
+		byte[] payload = new byte[4];
+
+		payload[0] = DEVICE_CONFIG_CH;
+		payload[1] = REPORTING_INVERVAL_ID;
+		payload[2] = byte0;
+		payload[3] = byte1;
+
+		return payload;
+
+	}
+
+	public static byte[] encodeRebootDevicePayload() {
+
+		return REBOOT_PAYLOAD;
 
 	}
 
